@@ -98,7 +98,7 @@ setMethod("otu_table", "dgCMatrix", function(object, taxa_are_rows){
 #' @aliases otu_table,data.frame-method
 #' @rdname otu_table-methods
 setMethod("otu_table", "data.frame", function(object, taxa_are_rows){
-	otu_table(as(object, "matrix"), taxa_are_rows)
+	otu_table(as(object, "dgCMatrix"), taxa_are_rows)
 })
 # Any less-specific class, not inherited by those above.
 #' @aliases otu_table,ANY-method
