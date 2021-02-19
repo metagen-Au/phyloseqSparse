@@ -1,5 +1,5 @@
 ######################################################################
-#' @importClassesFrom Matrix 
+
 ################################################################################
 #' The S4 class for storing taxa-abundance information.
 #'
@@ -19,6 +19,7 @@
 #'  }
 #' @name otu_table-class
 #' @rdname otu_table-class
+#' @importClassesFrom Matrix 
 #' @exportClass otu_table
 setClass(
   "otu_table",
