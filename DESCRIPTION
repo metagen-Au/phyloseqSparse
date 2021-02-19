@@ -24,6 +24,7 @@ Imports:
     ggplot2 (>= 2.1.0),
     igraph (>= 1.0.1),
     methods (>= 3.3.0),
+    Matrix,
     multtest (>= 2.28.0),
     plyr (>= 1.8.3),
     reshape2 (>= 1.4.1),

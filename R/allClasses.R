@@ -18,7 +18,7 @@
 #' @name otu_table-class
 #' @rdname otu_table-class
 #' @exportClass otu_table
-setClass("otu_table", representation(taxa_are_rows="logical"), contains = "matrix")
+setClass("otu_table", representation(taxa_are_rows="logical"), contains = "dcgMatrix")
 ################################################################################
 #' The S4 for storing sample variables.
 #'
