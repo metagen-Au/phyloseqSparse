@@ -19,6 +19,7 @@
 #'  }
 #' @name otu_table-class
 #' @rdname otu_table-class
+#' @import Matrix
 #' @importClassesFrom Matrix 
 #' @exportClass otu_table
 setClass(
