@@ -6,6 +6,8 @@
 \alias{otu_table,phyloseq-method}
 \alias{otu_table,otu_table-method}
 \alias{otu_table,matrix-method}
+\alias{otu_table,dgCMatrix-method}
+\alias{otu_table,sparse_matrix-method}
 \alias{otu_table,data.frame-method}
 \alias{otu_table,ANY-method}
 \title{Build or access the otu_table.}
@@ -17,6 +19,8 @@ otu_table(object, taxa_are_rows, errorIfNULL=TRUE)
 \S4method{otu_table}{otu_table}(object, errorIfNULL = TRUE)
 
 \S4method{otu_table}{matrix}(object, taxa_are_rows)
+
+\S4method{otu_table}{dgCMatrix}(object, taxa_are_rows)
 
 \S4method{otu_table}{data.frame}(object, taxa_are_rows)
 

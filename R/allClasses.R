@@ -24,7 +24,7 @@
 #' @exportClass otu_table
 setClass(
   "otu_table",
-  contains="dcgMatrix"
+  contains="dgCMatrix"
  # slots=c(new_slot="numeric")
 ) -> otu_table
 #setClass("otu_table", representation(taxa_are_rows="logical"), contains = "dcgMatrix")
