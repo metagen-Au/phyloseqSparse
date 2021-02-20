@@ -9,7 +9,7 @@ setMethod("show", "otu_table", function(object){
     } else { 
     	cat("                     taxa are columns", fill=TRUE)
     }
-	show(as(object, "matrix"))
+	show(as(object, "dgCMatrix"))
 })
 ############################################################################
 #' @rdname show-methods
