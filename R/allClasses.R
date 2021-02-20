@@ -24,7 +24,7 @@
 setClass(
   "otu_table",
   representation(taxa_are_rows="logical"),
-  contains="dgCMatrix")
+  contains="dgCMatrix")-> otu_table
 #) -> otu_table
 #setClass("otu_table", representation(taxa_are_rows="logical"), contains = "dcgMatrix")
 ################################################################################
