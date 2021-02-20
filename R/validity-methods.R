@@ -33,11 +33,6 @@ validotu_table <- function(object){
 		return("\n OTU abundance data must have non-zero dimensions.")
 	}
 	# Verify that it is numeric matrix
-	if( !is.numeric(object@.Data[, 1]) ){
-    text = "\n Non-numeric matrix provided as OTU table.\n" 
-    text = paste0(text, "Abundance is expected to be numeric.")
-		return(text)
-	}
 	return(TRUE)
 }
 ## assign the function as the validity method for the otu_table class
