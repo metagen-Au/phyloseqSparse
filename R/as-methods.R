@@ -1,8 +1,11 @@
 ################################################################################
 # coercion methods
 ################################################################################
-setAs("phyloseq", "dgCMatrix", function(from){
+setAs("phyloseq", "matrix", function(from){
 	from@.Data
+})
+setAs("phyloseq", "dgCMatrix", function(from){
+  from@.Data
 })
 setAs("phyloseq", "otu_table", function(from){
 	otu_table(from)	
