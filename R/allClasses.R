@@ -21,10 +21,10 @@
 #' @rdname otu_table-class
 #' @import Matrix
 #' @exportClass otu_table
-setClass(
+otu_table<-setClass(
   "otu_table",
   representation(taxa_are_rows="logical"),
-  contains="dgCMatrix")-> otu_table
+  contains="dgCMatrix")
 #) -> otu_table
 #setClass("otu_table", representation(taxa_are_rows="logical"), contains = "dcgMatrix")
 ################################################################################
