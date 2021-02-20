@@ -28,10 +28,10 @@ Imports:
     plyr (>= 1.8.3),
     reshape2 (>= 1.4.1),
     scales (>= 0.4.0),
-    vegan (>= 2.5)
-Depends:
-    R (>= 3.3.0),
+    vegan (>= 2.5),
     Matrix
+Depends:
+    R (>= 3.3.0)
 Suggests:
     BiocStyle (>= 2.4),
     DESeq2 (>= 1.16.1),
