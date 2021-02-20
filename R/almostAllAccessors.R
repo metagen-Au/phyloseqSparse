@@ -365,9 +365,9 @@ setGeneric("get_sample", function(physeq, i) standardGeneric("get_sample"))
 #' @rdname get_sample-methods
 setMethod("get_sample", "otu_table", function(physeq, i){
 	if( taxa_are_rows(physeq) ){
-		as(physeq, "matrix")[i, ]
+		as(physeq, "dgCMatrix")[i, ]
 	} else {
-		as(physeq, "matrix")[, i]
+		as(physeq, "dgCMatrix")[, i]
 	}
 })
 ################################################################################
@@ -409,9 +409,9 @@ setGeneric("get_taxa", function(physeq, i) standardGeneric("get_taxa"))
 #' @rdname get_taxa-methods
 setMethod("get_taxa", "otu_table", function(physeq, i){
 	if( taxa_are_rows(physeq) ){
-		as(physeq, "matrix")[, i]
+		as(physeq, "dgCMatrix")[, i]
 	} else {
-		as(physeq, "matrix")[i, ]
+		as(physeq, "dgCMatrix")[i, ]
 	}
 })
 #' @aliases get_taxa,phyloseq-method

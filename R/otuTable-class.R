@@ -52,7 +52,9 @@ setMethod("otu_table", "otu_table", function(object, errorIfNULL=TRUE){ return(o
 #' @rdname otu_table-methods
 setMethod("otu_table", "matrix", function(object, taxa_are_rows){
 	# instantiate first to check validity
-	otutab <- new("otu_table", object, taxa_are_rows=taxa_are_rows)
+  otutab<- otu_table(as(object, "dgCMatrix"), taxa_are_rows)
+  
+#	otutab <- new("otu_table", object, taxa_are_rows=taxa_are_rows)
 	# Want dummy species/sample index names if missing
 	if(taxa_are_rows){
 		if(is.null(rownames(otutab))){
@@ -71,29 +73,7 @@ setMethod("otu_table", "matrix", function(object, taxa_are_rows){
 	}
 	return(otutab)
 })
-#' @aliases otu_table,sparse_matrix-method
-#' @rdname otu_table-methods
-setMethod("otu_table", "dgCMatrix", function(object, taxa_are_rows){
-  # instantiate first to check validity
-  otutab <- new("otu_table", object, taxa_are_rows=taxa_are_rows)
-  # Want dummy species/sample index names if missing
-  if(taxa_are_rows){
-    if(is.null(rownames(otutab))){
-      rownames(otutab) <- paste("sp", 1:nrow(otutab), sep="")
-    }
-    if(is.null(colnames(otutab))){
-      colnames(otutab) <- paste("sa", 1:ncol(otutab), sep="")
-    }
-  } else {
-    if(is.null(rownames(otutab))){
-      rownames(otutab) <- paste("sa",1:nrow(otutab),sep="")
-    }
-    if(is.null(colnames(otutab))){
-      colnames(otutab) <- paste("sp",1:ncol(otutab),sep="")
-    }
-  }
-  return(otutab)
-})
+
 # # # Convert to matrix, then dispatch.
 #' @aliases otu_table,data.frame-method
 #' @rdname otu_table-methods
