@@ -52,7 +52,8 @@ setMethod("otu_table", "otu_table", function(object, errorIfNULL=TRUE){ return(o
 #' @rdname otu_table-methods
 setMethod("otu_table", "matrix", function(object, taxa_are_rows){
 	# instantiate first to check validity
-  otutab<- otu_table(as(object, "dgCMatrix"), taxa_are_rows)
+  otutab<- as(object, "dgCMatrix")
+  otutab<- otu_table(otutab, taxa_are_rows)
   
 #	otutab <- new("otu_table", object, taxa_are_rows=taxa_are_rows)
 	# Want dummy species/sample index names if missing
@@ -102,7 +103,8 @@ setMethod("otu_table", "dgCMatrix", function(object, taxa_are_rows){
 #' @aliases otu_table,data.frame-method
 #' @rdname otu_table-methods
 setMethod("otu_table", "data.frame", function(object, taxa_are_rows){
-	otu_table(as(object, "dgCMatrix"), taxa_are_rows)
+  otutab<- as(object, "dgCMatrix")
+	otu_table(otutab, taxa_are_rows)
 })
 # Any less-specific class, not inherited by those above.
 #' @aliases otu_table,ANY-method
