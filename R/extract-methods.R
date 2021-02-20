@@ -35,6 +35,10 @@ setMethod("[", "otu_table", function(x, i, j, ...){
 	newx <- as(x, "matrix")[i, j, drop=FALSE]
 	otu_table(newx, taxa_are_rows(x) )
 })
+setMethod("[%", "otu_table", function(x, i, j, ...){
+  newx <- as(x, "matrix")[i, j, drop=FALSE]
+  otu_table(newx, taxa_are_rows(x) )
+})
 # extract parts of sample_data
 #
 #' @export
