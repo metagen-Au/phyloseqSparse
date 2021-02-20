@@ -61,7 +61,16 @@ setMethod("[", c("otu_table","ANY","ANY"), function(x, i, j, ...){
   newx2<- otu_table(newx, taxa_are_rows(x) )
   return(newx2)
 })
-
+setMethod("[", c("otu_table","character","missing"), function(x, i, j, ...){
+  newx <- as(x, "matrix")[i, j, drop=TRUE]
+  newx2<- otu_table(newx, taxa_are_rows(x) )
+  return(newx2)
+})
+setMethod("[", c("otu_table","missing","character"), function(x, i, j, ...){
+  newx <- as(x, "matrix")[i, j, drop=TRUE]
+  newx2<- otu_table(newx, taxa_are_rows(x) )
+  return(newx2)
+})
 # extract parts of sample_data
 #
 #' @export
