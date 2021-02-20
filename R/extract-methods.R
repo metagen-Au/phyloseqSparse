@@ -33,12 +33,10 @@
 #' nrow(otu_table(esophagus)[1:5, ])
 setMethod("[", "otu_table", function(x, i, j, ...){
 	newx <- as(x, "matrix")[i, j, drop=FALSE]
-	otu_table(newx, taxa_are_rows(x) )
+	newx2<- otu_table(newx, taxa_are_rows(x) )
+	return(newx2)
 })
-setMethod("[%", "otu_table", function(x, i, j, ...){
-  newx <- as(x, "matrix")[i, j, drop=FALSE]
-  otu_table(newx, taxa_are_rows(x) )
-})
+
 # extract parts of sample_data
 #
 #' @export
