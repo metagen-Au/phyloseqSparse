@@ -378,9 +378,9 @@ setMethod("merge_taxa", "otu_table", function(x, eqtaxa,
 	keepIndex   = indList$keepIndex
 	# Merge taxa by summing all the equivalent taxa and assigning to the one in keepIndex
 	if( taxa_are_rows(x) ){
-		x[keepIndex, ] = colSums(x[eqtaxa, ])
+		x[keepIndex, ] = Matrix::colSums(x[eqtaxa, ])
 	} else {
-		x[, keepIndex] = rowSums(x[, eqtaxa])	
+		x[, keepIndex] = Matrix::rowSums(x[, eqtaxa])	
 	}
 	# For speed, use matrix subsetting instead of prune_taxa()
 	if (taxa_are_rows(x)) {
