@@ -80,7 +80,7 @@ setMethod("[", c("otu_table","ANY","ANY"), function(x, i, j, ...){
 #' @rdname extract-methods
 #' @inheritParams base::Extract
 #' @export
-setMethod("[", c("otu_table","character","missing"), function(x, i, j, ...){
+setMethod("[", c("otu_table","character","missing","ANY"), function(x, i, j, ...){
   newx <- as(x, "matrix")[i, j, drop=FALSE]
   newx2<- otu_table(newx, taxa_are_rows(x) )
   return(newx2)
@@ -88,7 +88,7 @@ setMethod("[", c("otu_table","character","missing"), function(x, i, j, ...){
 #' @rdname extract-methods
 #' @inheritParams base::Extract
 #' @export
-setMethod("[", c("otu_table","missing","character"), function(x, i, j, ...){
+setMethod("[", c("otu_table","missing","character","ANY"), function(x, i, j, ...){
   newx <- as(x, "matrix")[i, j, drop=FALSE]
   newx2<- otu_table(newx, taxa_are_rows(x) )
   return(newx2)
@@ -96,7 +96,7 @@ setMethod("[", c("otu_table","missing","character"), function(x, i, j, ...){
 #' @rdname extract-methods
 #' @inheritParams base::Extract
 #' @export
-setMethod("[", c("otu_table","ANY","character"), function(x, i, j, ...){
+setMethod("[", c("otu_table","ANY","character","ANY"), function(x, i, j, ...){
   newx <- as(x, "matrix")[i, j, drop=FALSE]
   newx2<- otu_table(newx, taxa_are_rows(x) )
   return(newx2)
@@ -104,7 +104,7 @@ setMethod("[", c("otu_table","ANY","character"), function(x, i, j, ...){
 #' @rdname extract-methods
 #' @inheritParams base::Extract
 #' @export
-setMethod("[", c("otu_table","character","ANY"), function(x, i, j, ...){
+setMethod("[", c("otu_table","character","ANY","ANY"), function(x, i, j, ...){
   newx <- as(x, "matrix")[i, j, drop=FALSE]
   newx2<- otu_table(newx, taxa_are_rows(x) )
   return(newx2)
@@ -112,7 +112,7 @@ setMethod("[", c("otu_table","character","ANY"), function(x, i, j, ...){
 #' @rdname extract-methods
 #' @inheritParams base::Extract
 #' @export
-setMethod("[", c("otu_table","character","character"), function(x, i, j, ...){
+setMethod("[", c("otu_table","character","character","ANY"), function(x, i, j, ...){
   newx <- as(x, "matrix")[i, j, drop=FALSE]
   newx2<- otu_table(newx, taxa_are_rows(x) )
   return(newx2)
