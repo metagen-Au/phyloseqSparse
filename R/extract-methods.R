@@ -184,6 +184,21 @@ setMethod("[", c("otu_table","integer","missing","logical"), function(x, i, j, .
   return(newx2)
 })
 
+#' @export
+setMethod("[<-", c("otu_table","missing","integer","numeric"), function(x, i, j,value){
+  newx <- as(x, "matrix")
+  newx[i,j]<- value
+  newx2<- otu_table(newx, taxa_are_rows(x) )
+  return(newx2)
+})
+#' @export
+setMethod("[<-", c("otu_table","integer","missing","numeric"), function(x, i, j,value){
+  newx <- as(x, "matrix")
+  newx[i,j]<- value
+  newx2<- otu_table(newx, taxa_are_rows(x) )
+  return(newx2)
+})
+
 # extract parts of sample_data
 #
 #' @export
