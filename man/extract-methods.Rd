@@ -15,6 +15,10 @@
 \alias{[,otu_table,index,missing,missing-method}
 \alias{[,otu_table,missing,index,ANY-method}
 \alias{[,otu_table,missing,index,missing-method}
+\alias{[,otu_table,missing,index,logical-method}
+\alias{[,otu_table,index,missing,logical-method}
+\alias{[,otu_table,missing,integer,logical-method}
+\alias{[,otu_table,integer,missing,logical-method}
 \alias{[,sample_data,ANY,ANY,ANY-method}
 \alias{[,taxonomyTable,ANY,ANY,ANY-method}
 \alias{[,XStringSet,character,ANY,ANY-method}
@@ -49,6 +53,14 @@
 \S4method{[}{otu_table,missing,index,ANY}(x, i, j, ..., drop = TRUE)
 
 \S4method{[}{otu_table,missing,index,missing}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{otu_table,missing,index,logical}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{otu_table,index,missing,logical}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{otu_table,missing,integer,logical}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{otu_table,integer,missing,logical}(x, i, j, ..., drop = FALSE)
 
 \S4method{[}{sample_data,ANY,ANY,ANY}(x, i, j, ..., drop = TRUE)
 

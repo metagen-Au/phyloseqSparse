@@ -39,7 +39,7 @@ setMethod("[", "otu_table", function(x, i, j, ...){
 #' @rdname extract-methods
 #' @inheritParams base::Extract
 #' @export
-setMethod("[", c("otu_table","integer","integer"), function(x, i, j, ...){
+setMethod("[", c("otu_table","integer","integer","ANY"), function(x, i, j, ...){
   newx <- as(x, "matrix")[i, j, drop=FALSE]
   newx2<- otu_table(newx, taxa_are_rows(x) )
   return(newx2)
@@ -47,7 +47,7 @@ setMethod("[", c("otu_table","integer","integer"), function(x, i, j, ...){
 #' @rdname extract-methods
 #' @inheritParams base::Extract
 #' @export
-setMethod("[", c("otu_table","integer","missing"), function(x, i, j, ...){
+setMethod("[", c("otu_table","integer","missing","ANY"), function(x, i, j, ...){
   newx <- as(x, "matrix")[i, j, drop=FALSE]
   newx2<- otu_table(newx, taxa_are_rows(x) )
   return(newx2)
@@ -55,7 +55,7 @@ setMethod("[", c("otu_table","integer","missing"), function(x, i, j, ...){
 #' @rdname extract-methods
 #' @inheritParams base::Extract
 #' @export
-setMethod("[", c("otu_table","missing","integer"), function(x, i, j, ...){
+setMethod("[", c("otu_table","missing","integer","ANY"), function(x, i, j, ...){
   newx <- as(x, "matrix")[i, j, drop=FALSE]
   newx2<- otu_table(newx, taxa_are_rows(x) )
   return(newx2)
@@ -63,7 +63,7 @@ setMethod("[", c("otu_table","missing","integer"), function(x, i, j, ...){
 #' @rdname extract-methods
 #' @inheritParams base::Extract
 #' @export
-setMethod("[", c("otu_table","missing","missing"), function(x, i, j, ...){
+setMethod("[", c("otu_table","missing","missing","ANY"), function(x, i, j, ...){
   newx <- as(x, "matrix")[i, j, drop=FALSE]
   newx2<- otu_table(newx, taxa_are_rows(x) )
   return(newx2)
@@ -71,7 +71,7 @@ setMethod("[", c("otu_table","missing","missing"), function(x, i, j, ...){
 #' @rdname extract-methods
 #' @inheritParams base::Extract
 #' @export
-setMethod("[", c("otu_table","ANY","ANY"), function(x, i, j, ...){
+setMethod("[", c("otu_table","ANY","ANY","ANY"), function(x, i, j, ...){
   newx <- as(x, "matrix")[i, j, drop=FALSE]
   newx2<- otu_table(newx, taxa_are_rows(x)
                     )
@@ -150,6 +150,40 @@ setMethod("[", c("otu_table","missing","index","missing"), function(x, i, j, ...
   newx2<- otu_table(newx, taxa_are_rows(x) )
   return(newx2)
 })
+
+#' @rdname extract-methods
+#' @inheritParams base::Extract
+#' @export
+setMethod("[", c("otu_table","missing","index","logical"), function(x, i, j, ...,drop=FALSE){
+  newx <- as(x, "matrix")[i, j,drop=drop]
+  newx2<- otu_table(newx, taxa_are_rows(x) )
+  return(newx2)
+})
+#' @rdname extract-methods
+#' @inheritParams base::Extract
+#' @export
+setMethod("[", c("otu_table","index","missing","logical"), function(x, i, j, ...,drop=FALSE){
+  newx <- as(x, "matrix")[i, j,drop=drop]
+  newx2<- otu_table(newx, taxa_are_rows(x) )
+  return(newx2)
+})
+#' @rdname extract-methods
+#' @inheritParams base::Extract
+#' @export
+setMethod("[", c("otu_table","missing","integer","logical"), function(x, i, j, ...,drop=FALSE){
+  newx <- as(x, "matrix")[i, j,drop=drop]
+  newx2<- otu_table(newx, taxa_are_rows(x) )
+  return(newx2)
+})
+#' @rdname extract-methods
+#' @inheritParams base::Extract
+#' @export
+setMethod("[", c("otu_table","integer","missing","logical"), function(x, i, j, ...,drop=FALSE){
+  newx <- as(x, "matrix")[i, j,drop=drop]
+  newx2<- otu_table(newx, taxa_are_rows(x) )
+  return(newx2)
+})
+
 # extract parts of sample_data
 #
 #' @export
