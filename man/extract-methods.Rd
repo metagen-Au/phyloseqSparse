@@ -2,12 +2,41 @@
 % Please edit documentation in R/extract-methods.R
 \name{[,otu_table,ANY,ANY,ANY-method}
 \alias{[,otu_table,ANY,ANY,ANY-method}
+\alias{[,otu_table,integer,integer,ANY-method}
+\alias{[,otu_table,integer,missing,ANY-method}
+\alias{[,otu_table,missing,integer,ANY-method}
+\alias{[,otu_table,missing,missing,ANY-method}
+\alias{[,otu_table,character,missing,ANY-method}
+\alias{[,otu_table,missing,character,ANY-method}
+\alias{[,otu_table,ANY,character,ANY-method}
+\alias{[,otu_table,character,ANY,ANY-method}
+\alias{[,otu_table,character,character,ANY-method}
 \alias{[,sample_data,ANY,ANY,ANY-method}
 \alias{[,taxonomyTable,ANY,ANY,ANY-method}
 \alias{[,XStringSet,character,ANY,ANY-method}
 \title{Method extensions to extraction operator for phyloseq objects.}
 \usage{
 \S4method{[}{otu_table,ANY,ANY,ANY}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{otu_table,integer,integer,ANY}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{otu_table,integer,missing,ANY}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{otu_table,missing,integer,ANY}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{otu_table,missing,missing,ANY}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{otu_table,ANY,ANY,ANY}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{otu_table,character,missing,ANY}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{otu_table,missing,character,ANY}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{otu_table,ANY,character,ANY}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{otu_table,character,ANY,ANY}(x, i, j, ..., drop = TRUE)
+
+\S4method{[}{otu_table,character,character,ANY}(x, i, j, ..., drop = TRUE)
 
 \S4method{[}{sample_data,ANY,ANY,ANY}(x, i, j, ..., drop = TRUE)
 
