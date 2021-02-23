@@ -75,4 +75,6 @@ Collate:
     'extend_DESeq2.R'
     'phylo-class.R'
     'extend_metagenomeSeq.R'
+    'mergetaxavec-methods.R'
+    'rowsum-method.R'
 RoxygenNote: 7.1.1
