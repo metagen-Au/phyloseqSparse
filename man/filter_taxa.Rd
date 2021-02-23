@@ -2,9 +2,12 @@
 % Please edit documentation in R/transform_filter-methods.R
 \name{filter_taxa}
 \alias{filter_taxa}
+\alias{filterTaxa2}
 \title{Filter taxa based on across-sample OTU abundance criteria}
 \usage{
 filter_taxa(physeq, flist, prune=FALSE)
+
+filterTaxa2(physeq, fun)
 }
 \arguments{
 \item{physeq}{(Required). A \code{\link{phyloseq-class}} object that you
@@ -37,6 +40,11 @@ indicating whether or not each OTU passed the criteria.
 Alternatively, if the \code{"prune"} option is set to \code{TRUE},
 it returns the already-trimmed version of the phyloseq object.
 }
+\section{Functions}{
+\itemize{
+\item \code{filterTaxa2}: Sets `prune = TRUE`
+}}
+
 \examples{
  data("enterotype")
  require("genefilter")

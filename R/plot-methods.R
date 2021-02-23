@@ -1418,134 +1418,52 @@ extract_eigenvalue.decorana = function(ordination) ordination$evals
 #' can help alleviate RAM usage problems.
 #' This function is made user-accessible for flexibility,
 #' but is also used extensively by plot functions in phyloseq.
+
+
+#' @param physeq An [otu_table-class] or [phyloseq-class]; most useful for
+#'   phyloseq-class.
+#' @param as Class of the output table; see Details.
 #'
-#' @usage psmelt(physeq)
-#'
-#' @param physeq (Required). An \code{\link{otu_table-class}} or 
-#'  \code{\link{phyloseq-class}}. Function most useful for phyloseq-class.
-#'
-#' @return A \code{\link{data.frame}}-class table.
+#' @return A table of the specified class
 #'
 #' @seealso
-#'  \code{\link{plot_bar}}
-#' 
-#'  \code{\link[reshape2]{melt}}
-#'
-#'  \code{\link{merge}}
-#' 
+#' [plot_bar()]
+#' @import dplyr
+#' @import data.table
 #' @import reshape2
-#' 
 #' @export
-#'
-#' @examples
-#' data("GlobalPatterns")
-#' gp.ch = subset_taxa(GlobalPatterns, Phylum == "Chlamydiae")
-#' mdf = psmelt(gp.ch)
-#' nrow(mdf)
-#' ncol(mdf)
-#' colnames(mdf)
-#' head(rownames(mdf))
-#' # Create a ggplot similar to
-#' library("ggplot2")
-#' p = ggplot(mdf, aes(x=SampleType, y=Abundance, fill=Genus))
-#' p = p + geom_bar(color="black", stat="identity", position="stack")
-#' print(p)
-psmelt = function(physeq){
-  # Access covariate names from object, if present
-  if(!inherits(physeq, "phyloseq")){
-    rankNames = NULL
-    sampleVars = NULL
-  } else {
-    # Still might be NULL, but attempt access
-    rankNames = rank_names(physeq, FALSE)
-    sampleVars = sample_variables(physeq, FALSE) 
-  }
-  # Define reserved names
-  reservedVarnames = c("Sample", "Abundance", "OTU")  
-  # type-1a conflict: between sample_data 
-  # and reserved psmelt variable names
-  type1aconflict = intersect(reservedVarnames, sampleVars)
-  if(length(type1aconflict) > 0){
-    wh1a = which(sampleVars %in% type1aconflict)
-    new1a = paste0("sample_", sampleVars[wh1a])
-    # First warn about the change
-    warning("The sample variables: \n",
-            paste(sampleVars[wh1a], collapse=", "), 
-            "\n have been renamed to: \n",
-            paste0(new1a, collapse=", "), "\n",
-            "to avoid conflicts with special phyloseq plot attribute names.")
-    # Rename the sample variables.
-    colnames(sample_data(physeq))[wh1a] <- new1a
-  }
-  # type-1b conflict: between tax_table
-  # and reserved psmelt variable names
-  type1bconflict = intersect(reservedVarnames, rankNames)
-  if(length(type1bconflict) > 0){
-    wh1b = which(rankNames %in% type1bconflict)
-    new1b = paste0("taxa_", rankNames[wh1b])
-    # First warn about the change
-    warning("The rank names: \n",
-            paste(rankNames[wh1b], collapse=", "), 
-            "\n have been renamed to: \n",
-            paste0(new1b, collapse=", "), "\n",
-            "to avoid conflicts with special phyloseq plot attribute names.")
-    # Rename the conflicting taxonomic ranks
-    colnames(tax_table(physeq))[wh1b] <- new1b
-  }
-  # type-2 conflict: internal between tax_table and sample_data
-  type2conflict = intersect(sampleVars, rankNames)
-  if(length(type2conflict) > 0){
-    wh2 = which(sampleVars %in% type2conflict)
-    new2 = paste0("sample_", sampleVars[wh2])
-    # First warn about the change
-    warning("The sample variables: \n",
-            paste0(sampleVars[wh2], collapse=", "), 
-            "\n have been renamed to: \n",
-            paste0(new2, collapse=", "), "\n",
-            "to avoid conflicts with taxonomic rank names.")
-    # Rename the sample variables
-    colnames(sample_data(physeq))[wh2] <- new2
-  }
-  # Enforce OTU table orientation. Redundant-looking step
-  # supports "naked" otu_table as `physeq` input.
-  otutab = otu_table(physeq)
-  if(!taxa_are_rows(otutab)){otutab <- t(otutab)}
-  # Melt the OTU table: wide form to long form table
-  mdf = reshape2::melt(as(otutab, "matrix"))
-  colnames(mdf)[1] <- "OTU"
-  colnames(mdf)[2] <- "Sample"
-  colnames(mdf)[3] <- "Abundance"
-  # Row and Col names are coerced to integer or factor if possible.
-  # Do not want this. Coerce these to character.
-  # e.g. `OTU` should always be discrete, even if OTU ID values can be coerced to integer
-  mdf$OTU <- as.character(mdf$OTU)
-  mdf$Sample <- as.character(mdf$Sample)
-  # Merge the sample data.frame if present
-  if(!is.null(sampleVars)){
-    sdf = data.frame(sample_data(physeq), stringsAsFactors=FALSE)
-    sdf$Sample <- sample_names(physeq)
-    # merge the sample-data and the melted otu table
-    mdf <- merge(mdf, sdf, by.x="Sample")
-  }
-  # Next merge taxonomy data, if present
-  if(!is.null(rankNames)){
-    TT = access(physeq, "tax_table")
-    # First, check for empty TT columns (all NA)
-    keepTTcols <- colSums(is.na(TT)) < ntaxa(TT)
-    # Protect against all-empty columns, or col-less matrix
-    if(length(which(keepTTcols)) > 0 & ncol(TT) > 0){
-      # Remove the empty columns
-      TT <- TT[, keepTTcols]
-      # Add TT to the "psmelt" data.frame
-      tdf = data.frame(TT, OTU=taxa_names(physeq))
-      # Now add to the "psmelt" output data.frame, `mdf`
-      mdf <- merge(mdf, tdf, by.x="OTU")
+
+psmelt<- 
+  function(physeq){  
+    
+    if(is.null(physeq@sam_data)){
+      
+      df1<- as(otu_table(physeq),"matrix")
+      
+    }else{
+      
+      df1<-  do.call( "cbind" , list(as(otu_table(physeq),"matrix"),sample_data(physeq)))
+      
     }
+    
+    df1<- df1 %>% 
+      reshape2::melt() %>% 
+      dplyr::filter(value >0)
+    
+    if(!is.null(physeq@tax_table)){
+      
+      taxaID<- match(df1$variable, taxa_names(physeq))
+      colnames(df1)<- c("Sample", "Abundance", "OTU") 
+      
+      # Fast cbind
+      df1<- do.call("cbind",list(df1,tax_table(physeq)[taxaID,]))
+    }
+    
+    df1<- data.table::data.table(df1)
+    
+    return(df1)
+    
   }
-  # Sort the entries by abundance
-  mdf = mdf[order(mdf$Abundance, decreasing=TRUE), ]
-  return(mdf)
-}
 ################################################################################
 #' A flexible, informative barplot phyloseq data
 #'

@@ -326,108 +326,82 @@ tip_glom = function(physeq, h=0.2, hcfun=agnes, ...){
 #' for agglomeration will be replaced with \code{NA},
 #' because they should be meaningless following agglomeration.
 #'
-#' @usage tax_glom(physeq, taxrank=rank_names(physeq)[1], NArm=TRUE, bad_empty=c(NA, "", " ", "\t"))
+#' Acknowledgements: Documentation and general strategy derived from
+#' `phyloseq::tax_glom()`.
 #'
-#' @param physeq (Required). \code{\link{phyloseq-class}} or \code{\link{otu_table}}.
-#'
-#' @param taxrank A character string specifying the taxonomic level
-#'  that you want to agglomerate over.
-#'  Should be among the results of \code{rank_names(physeq)}.
-#'  The default value is \code{rank_names(physeq)[1]},
-#'  which may agglomerate too broadly for a given experiment.
-#'  You are strongly encouraged to try different values for this argument.
-#'
-#' @param NArm (Optional). Logical, length equal to one. Default is \code{TRUE}.
-#'  CAUTION. The decision to prune (or not) taxa for which you lack categorical
-#'  data could have a large effect on downstream analysis. You may want to
-#'  re-compute your analysis under both conditions, or at least think carefully
-#'  about what the effect might be and the reasons explaining the absence of 
-#'  information for certain taxa. In the case of taxonomy, it is often a result 
-#'  of imprecision in taxonomic designation based on short phylogenetic sequences
-#'  and a patchy system of nomenclature. If this seems to be an issue for your
-#'  analysis, think about also trying the nomenclature-agnostic \code{\link{tip_glom}}
-#'  method if you have a phylogenetic tree available.
-#'
-#' @param bad_empty (Optional). Character vector. Default: \code{c(NA, "", " ", "\t")}.
-#'  Defines the bad/empty values 
-#'  that should be ignored and/or considered unknown. They will be removed
-#'  from the internal agglomeration vector derived from the argument to \code{tax},
-#'  and therefore agglomeration will not combine taxa according to the presence
-#'  of these values in \code{tax}. Furthermore, the corresponding taxa can be
-#'  optionally pruned from the output if \code{NArm} is set to \code{TRUE}.
+#' @param physeq (Required). [phyloseq-class()] or [tax_table()].
+#' @param taxrank A character string specifying the taxonomic level that you
+#' want to agglomerate over. Should be among the results of
+#' `rank_names(physeq)`. The default value is `rank_names(physeq)[1]`, which
+#' may agglomerate too broadly for a given experiment. You are strongly
+#' encouraged to try different values for this argument.
+#' @param NArm (Optional). Logical, length equal to one. Default is `TRUE`.
+#' CAUTION. The decision to prune (or not) taxa for which you lack categorical
+#' data could have a large effect on downstream analysis.  You may want to
+#' re-compute your analysis under both conditions, or at least think carefully
+#' about what the effect might be and the reasons explaining the absence of
+#' information for certain taxa. In the case of taxonomy, it is often a result
+#' of imprecision in taxonomic designation based on short phylogenetic
+#' sequences and a patchy system of nomenclature.  If this seems to be an issue
+#' for your analysis, think about also trying the nomenclature-agnostic
+#' [tip_glom()] method if you have a phylogenetic tree available.
+#' @param bad_empty (Optional). Character vector. Default: `c(NA, "", " ",
+#' "\t")`. Defines the bad/empty values that should be ignored and/or
+#' considered unknown. They will be removed from the internal agglomeration
+#' vector derived from the argument to `tax`, and therefore agglomeration will
+#' not combine taxa according to the presence of these values in `tax`.
+#' Furthermore, the corresponding taxa can be optionally pruned from the output
+#' if `NArm` is set to `TRUE`.
+#' @param reorder Logical specifying whether to reorder the taxa by taxonomy
+#' strings or keep initial order. Ignored if `physeq` has a phylogenetic tree.
 #' 
-#' @return A taxonomically-agglomerated, optionally-pruned, object with class matching
-#' the class of \code{physeq}.
+#' @return A taxonomically-agglomerated, optionally-pruned, object with class
+#' matching the class of `physeq`.
 #'
 #' @seealso
-#' \code{\link{tip_glom}}
+#' [phyloseq::tax_glom()]
 #' 
-#' \code{\link{prune_taxa}}
+#' [tip_glom()]
 #' 
-#' \code{\link{merge_taxa}}
+#' [prune_taxa()]
+#' 
+#' [merge_taxa_vec()]
 #' 
 #' @export
 #'
 #' @examples
-#' # data(GlobalPatterns)
-#' # ## print the available taxonomic ranks
-#' # colnames(tax_table(GlobalPatterns))
-#' # ## agglomerate at the Family taxonomic rank
-#' # (x1 <- tax_glom(GlobalPatterns, taxrank="Family") )
-#' # ## How many taxa before/after agglomeration?
-#' # ntaxa(GlobalPatterns); ntaxa(x1)
-#' # ## Look at enterotype dataset...
-#' # data(enterotype)
-#' # ## print the available taxonomic ranks. Shows only 1 rank available, not useful for tax_glom
-#' # colnames(tax_table(enterotype))
-tax_glom <- function(physeq, taxrank=rank_names(physeq)[1],
-					NArm=TRUE, bad_empty=c(NA, "", " ", "\t")){
-
-	# Error if tax_table slot is empty
-	if( is.null(access(physeq, "tax_table")) ){
-		stop("The tax_glom() function requires that physeq contain a taxonomyTable")
-	}
-	
-	# Error if bad taxrank
-	if( !taxrank[1] %in% rank_names(physeq) ){
-		stop("Bad taxrank argument. Must be among the values of rank_names(physeq)")		
-	}
-
-	# Make a vector from the taxonomic data.
-	CN  <- which( rank_names(physeq) %in% taxrank[1] )
-	tax <- as(access(physeq, "tax_table"), "matrix")[, CN]
-	
-	# if NArm is TRUE, remove the empty, white-space, NA values from 
-	if( NArm ){
-		keep_species <- names(tax)[ !(tax %in% bad_empty) ]
-		physeq <- prune_taxa(keep_species, physeq)
-	}
-
-	# Concatenate data up to the taxrank column, use this for agglomeration
-	tax <- as(access(physeq, "tax_table"), "matrix")[, 1:CN, drop=FALSE]
-	tax <- apply(tax, 1, function(i){paste(i, sep=";_;", collapse=";_;")})
-	
-	# Remove NAs and useless from the vector/factor for looping.
-	# This does not remove the taxa that have an unknown (NA)
-	# taxonomic designation at this particular taxonomic rank.
-	tax <- tax[ !(tax %in% bad_empty) ]
-	
-	# Define the OTU cliques to loop through
-	spCliques <- tapply(names(tax), factor(tax), list)
-	
-	# Successively merge taxa in physeq.
-	for( i in names(spCliques)){
-		physeq <- merge_taxa(physeq, spCliques[[i]])
-	}
-	
-	# "Empty" the values to the right of the rank, using NA_character_.
-	if( CN < length(rank_names(physeq)) ){
-		badcolumns <- (CN+1):length(rank_names(physeq))
-		tax_table(physeq)[, badcolumns] <- NA_character_
-	}
-	
-	# Return.
-	return(physeq)
+#' data(GlobalPatterns)
+#' # print the available taxonomic ranks
+#' colnames(tax_table(GlobalPatterns))
+#' # agglomerate at the Family taxonomic rank
+#' (x1 <- tax_glom(GlobalPatterns, taxrank="Family"))
+#' # How many taxa before/after agglomeration?
+#' ntaxa(GlobalPatterns); ntaxa(x1)
+function (physeq, taxrank = rank_names(physeq)[1], NArm = TRUE, 
+          bad_empty = c(NA, "", " ", "\t"), reorder = FALSE) 
+{
+  if (is.null(access(physeq, "tax_table"))) {
+    stop("`tax_glom()` requires that `physeq` contain a taxonomy table")
+  }
+  if (!taxrank[1] %in% rank_names(physeq)) {
+    stop("Bad `taxrank` argument. Must be among the values of `rank_names(physeq)`")
+  }
+  rank_idx <- which(rank_names(physeq) %in% taxrank[1])
+  if (NArm) {
+    bad_taxa <- tax_table(physeq)[, rank_idx] %in% bad_empty
+    physeq <- prune_taxa(!bad_taxa, physeq)
+  }
+  tax_strings <- apply(tax_table(physeq)[, 1:rank_idx, drop = FALSE], 
+                       1, function(x) {
+                         paste(x, collapse = ";")
+                       })
+  physeq <- merge_taxa_vec(physeq, tax_strings, tax_adjust = 0L, 
+                           reorder = reorder)
+  if (rank_idx < length(rank_names(physeq))) {
+    bad_ranks <- seq(rank_idx + 1, length(rank_names(physeq)))
+    tax_table(physeq)[, bad_ranks] <- NA_character_
+  }
+  physeq
 }
 ################################################################################
 ################################################################################
@@ -1185,3 +1159,76 @@ rm_outlierf <- function(f, na.rm=TRUE){
     }
 }
 ################################################################################
+# Function titles copied from phyloseq's documentation
+
+# Transform sample counts -----------------------------------------------------
+
+#' Transform abundance data in an `otu_table`, sample-by-sample
+#' 
+#' Version of [phyloseq::transform_sample_counts()] that allows a
+#' purrr-style anonymous function.
+#'
+#' This function simply calls [purrr::as_mapper()] on `fun` and passes the
+#' resulting function on to [phyloseq::transform_sample_counts()].
+#'
+#' @param physeq [phyloseq-class()] or [ape::phylo()].
+#' @param fun A function or formula that can be converted to a function by
+#'   [purrr::as_mapper()]
+#' @param ... Additional arguments passed on to `fun`
+#' 
+#' @seealso 
+#' [phyloseq::transform_sample_counts()]
+#' [purrr::as_mapper()]
+#'
+#' @export
+#' @examples
+#' data(GlobalPatterns)
+#' # Filter low prevalence taxa, then convert to proportions
+#' gp.prop <- GlobalPatterns %>%
+#'   filter_taxa2(~ sum(. > 0) > 5) %>%
+#'   transform_sample_counts(~ . / sum(.))
+transformCounts <- function(physeq, fun, ...) {
+  phyloseq::transform_sample_counts(physeq, purrr::as_mapper(fun), ...)
+}
+
+# Filter taxa -----------------------------------------------------------------
+
+#' Filter taxa based on across-sample OTU abundance criteria
+#' 
+#' Variations of [phyloseq::filter_taxa()] that allows a purrr-style anonymous
+#' function.
+#'
+#' `filter_taxa()` simply calls [purrr::as_mapper()] on `fun` and passes the
+#' resulting function on to [phyloseq::filter_taxa()]. `filter_taxa2()` also
+#' sets `prune = TRUE`, which is convenient when passing a phyloseq object in a
+#' pipe chain (see example).
+#'
+#' @param physeq [phyloseq-class()] or [ape::phylo()].
+#' @param fun A function or formula that can be converted to a function by
+#'   [purrr::as_mapper()]
+#' @param prune A logical. If `FALSE`, then this function returns a logical
+#'   vector specifying the taxa that passed the filter; if `TRUE`, then this
+#'   function returns the pruned phyloseq object.
+#'
+#' @export
+#' @seealso 
+#' [phyloseq::filter_taxa()]
+#' [purrr::as_mapper()]
+#' 
+#' @examples
+#' data(GlobalPatterns)
+#' # Filter low prevalence taxa and then convert to proportions
+#' gp.prop <- GlobalPatterns %>%
+#'   filter_taxa2(~ sum(. > 0) > 5) %>%
+#'   transform_sample_counts(~ . / sum(.))
+filterTaxa <- function(physeq, fun, prune = FALSE) {
+  phyloseq::filter_taxa(physeq, purrr::as_mapper(fun), prune = prune)
+}
+
+#' @export
+#' @describeIn filter_taxa Sets `prune = TRUE`
+filterTaxa2 <- function(physeq, fun) {
+  phyloseq::filter_taxa(physeq, purrr::as_mapper(fun), prune = TRUE)
+}
+
+

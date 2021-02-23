@@ -7,11 +7,13 @@
 psmelt(physeq)
 }
 \arguments{
-\item{physeq}{(Required). An \code{\link{otu_table-class}} or 
-\code{\link{phyloseq-class}}. Function most useful for phyloseq-class.}
+\item{physeq}{An [otu_table-class] or [phyloseq-class]; most useful for
+phyloseq-class.}
+
+\item{as}{Class of the output table; see Details.}
 }
 \value{
-A \code{\link{data.frame}}-class table.
+A table of the specified class
 }
 \description{
 The psmelt function is a specialized melt function for melting phyloseq objects
@@ -49,24 +51,6 @@ can help alleviate RAM usage problems.
 This function is made user-accessible for flexibility,
 but is also used extensively by plot functions in phyloseq.
 }
-\examples{
-data("GlobalPatterns")
-gp.ch = subset_taxa(GlobalPatterns, Phylum == "Chlamydiae")
-mdf = psmelt(gp.ch)
-nrow(mdf)
-ncol(mdf)
-colnames(mdf)
-head(rownames(mdf))
-# Create a ggplot similar to
-library("ggplot2")
-p = ggplot(mdf, aes(x=SampleType, y=Abundance, fill=Genus))
-p = p + geom_bar(color="black", stat="identity", position="stack")
-print(p)
-}
 \seealso{
-\code{\link{plot_bar}}
-
- \code{\link[reshape2]{melt}}
-
- \code{\link{merge}}
+[plot_bar()]
 }
