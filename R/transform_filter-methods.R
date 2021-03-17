@@ -377,7 +377,7 @@ tip_glom = function(physeq, h=0.2, hcfun=agnes, ...){
 #' (x1 <- tax_glom(GlobalPatterns, taxrank="Family"))
 #' # How many taxa before/after agglomeration?
 #' ntaxa(GlobalPatterns); ntaxa(x1)
-function (physeq, taxrank = rank_names(physeq)[1], NArm = TRUE, 
+tax_glom<- function (physeq, taxrank = rank_names(physeq)[1], NArm = TRUE, 
           bad_empty = c(NA, "", " ", "\t"), reorder = FALSE) 
 {
   if (is.null(access(physeq, "tax_table"))) {
