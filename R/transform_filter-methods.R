@@ -383,7 +383,7 @@ tip_glom = function(physeq, h=0.2, hcfun=agnes, ...){
 #' # ## print the available taxonomic ranks. Shows only 1 rank available, not useful for tax_glom
 #' # colnames(tax_table(enterotype))
 tax_glom<- function (physeq, taxrank = rank_names(physeq)[1], NArm = TRUE, 
-          bad_empty = c(NA, "", " ", "\t"), reorder = FALSE) 
+          bad_empty = c(NA, "", " ", "\t"), reorder = TRUE) 
 {
   if (is.null(access(physeq, "tax_table"))) {
     stop("`tax_glom()` requires that `physeq` contain a taxonomy table")
