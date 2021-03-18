@@ -34,6 +34,8 @@ from the internal agglomeration vector derived from the argument to \code{tax},
 and therefore agglomeration will not combine taxa according to the presence
 of these values in \code{tax}. Furthermore, the corresponding taxa can be
 optionally pruned from the output if \code{NArm} is set to \code{TRUE}.}
+
+\item{reorder}{(Logical)}
 }
 \value{
 A taxonomically-agglomerated, optionally-pruned, object with class matching

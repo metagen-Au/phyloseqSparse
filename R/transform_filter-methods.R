@@ -382,7 +382,7 @@ tip_glom = function(physeq, h=0.2, hcfun=agnes, ...){
 #' # data(enterotype)
 #' # ## print the available taxonomic ranks. Shows only 1 rank available, not useful for tax_glom
 #' # colnames(tax_table(enterotype))
-new_tax_glom<- function (physeq, taxrank = rank_names(physeq)[1], NArm = TRUE, 
+tax_glom<- function (physeq, taxrank = rank_names(physeq)[1], NArm = TRUE, 
           bad_empty = c(NA, "", " ", "\t"), reorder = FALSE) 
 {
   if (is.null(access(physeq, "tax_table"))) {
@@ -1304,7 +1304,7 @@ filterTaxa2 <- function(physeq, fun) {
 #' # data(enterotype)
 #' # ## print the available taxonomic ranks. Shows only 1 rank available, not useful for tax_glom
 #' # colnames(tax_table(enterotype))
-tax_glom <- function(physeq, taxrank=rank_names(physeq)[1],
+old_tax_glom <- function(physeq, taxrank=rank_names(physeq)[1],
                      NArm=TRUE, bad_empty=c(NA, "", " ", "\t")){
   
   # Error if tax_table slot is empty

@@ -162,8 +162,8 @@ setMethod("merge_phyloseq_pair", signature("otu_table", "otu_table"), function(x
 	if( !taxa_are_rows(y) ){ y <- t(y) }
 
 	# "merge" by addition.
-	newx[rownames(x), colnames(x)] <- x
-	newx[rownames(y), colnames(y)] <- newx[rownames(y), colnames(y)] + y
+	newx[rownames(x), colnames(x)] <- as(x,"matrix")
+	newx[rownames(y), colnames(y)] <- newx[rownames(y), colnames(y)] + as(y,"matrix")
 
 	# Create the new otu_table object
 	newx <- otu_table(newx, taxa_are_rows=TRUE)
