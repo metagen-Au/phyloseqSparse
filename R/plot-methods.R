@@ -1433,37 +1433,107 @@ extract_eigenvalue.decorana = function(ordination) ordination$evals
 #' @import reshape2
 #' @export
 
-psmelt<- 
-  function(physeq){  
-    
-    if(is.null(physeq@sam_data)){
-      
-      df1<- as(otu_table(physeq),"matrix")
-      
-    }else{
-      
-      df1<-  do.call( "cbind" , list(as(otu_table(physeq),"matrix"),sample_data(physeq)))
-      
-    }
-    
-    df1<- df1 %>% 
-      reshape2::melt() %>% 
-      dplyr::filter(value >0)
-    
-    if(!is.null(physeq@tax_table)){
-      
-      taxaID<- match(df1$variable, taxa_names(physeq))
-      colnames(df1)<- c("Sample", "Abundance", "OTU") 
-      
-      # Fast cbind
-      df1<- do.call("cbind",list(df1,tax_table(physeq)[taxaID,]))
-    }
-    
-    df1<- data.table::data.table(df1)
-    
-    return(df1)
-    
+psmelt <- function(physeq, as = "tbl_df") {
+  stopifnot(as %in% c("data.frame", "df", "data.table", "dt", "tbl_df", "tbl",
+                      "tibble"))
+  # Access covariate names from object, if present
+  if(!inherits(physeq, "phyloseq")){
+    rankNames = NULL
+    sampleVars = NULL
+  } else {
+    # Still might be NULL, but attempt access
+    rankNames = rank_names(physeq, FALSE)
+    sampleVars = sample_variables(physeq, FALSE) 
   }
+  # Define reserved names
+  reservedVarnames = c("Sample", "Abundance", "OTU")  
+  # type-1a conflict: between sample_data 
+  # and reserved psmelt variable names
+  type1aconflict = intersect(reservedVarnames, sampleVars)
+  if(length(type1aconflict) > 0){
+    wh1a = which(sampleVars %in% type1aconflict)
+    new1a = paste0("sample_", sampleVars[wh1a])
+    # First warn about the change
+    warning("The sample variables: \n",
+            paste(sampleVars[wh1a], collapse=", "), 
+            "\n have been renamed to: \n",
+            paste0(new1a, collapse=", "), "\n",
+            "to avoid conflicts with special phyloseq plot attribute names.")
+    # Rename the sample variables.
+    colnames(sample_data(physeq))[wh1a] <- new1a
+  }
+  # type-1b conflict: between tax_table
+  # and reserved psmelt variable names
+  type1bconflict = intersect(reservedVarnames, rankNames)
+  if(length(type1bconflict) > 0){
+    wh1b = which(rankNames %in% type1bconflict)
+    new1b = paste0("taxa_", rankNames[wh1b])
+    # First warn about the change
+    warning("The rank names: \n",
+            paste(rankNames[wh1b], collapse=", "), 
+            "\n have been renamed to: \n",
+            paste0(new1b, collapse=", "), "\n",
+            "to avoid conflicts with special phyloseq plot attribute names.")
+    # Rename the conflicting taxonomic ranks
+    colnames(tax_table(physeq))[wh1b] <- new1b
+  }
+  # type-2 conflict: internal between tax_table and sample_data
+  type2conflict = intersect(sampleVars, rankNames)
+  if(length(type2conflict) > 0){
+    wh2 = which(sampleVars %in% type2conflict)
+    new2 = paste0("sample_", sampleVars[wh2])
+    # First warn about the change
+    warning("The sample variables: \n",
+            paste0(sampleVars[wh2], collapse=", "), 
+            "\n have been renamed to: \n",
+            paste0(new2, collapse=", "), "\n",
+            "to avoid conflicts with taxonomic rank names.")
+    # Rename the sample variables
+    colnames(sample_data(physeq))[wh2] <- new2
+  }
+  # Enforce OTU table orientation. Redundant-looking step
+  # supports "naked" otu_table as `physeq` input.
+  otutab = otu_table(physeq)
+  if(!taxa_are_rows(otutab)){otutab <- t(otutab)}
+  ## Speedyseq changes start here
+  # Convert the otu table to a tibble in tall form (one sample-taxon obsevation
+  # per row)
+  dtb <- otutab %>% 
+    as("matrix") %>%
+    data.table::as.data.table(keep.rownames = "OTU") %>%
+    data.table::melt(id.vars = c("OTU"), variable.name = "Sample", 
+                     value.name = "Abundance", variable.factor = FALSE)
+  # Add the sample data if it exists
+  if (!is.null(sampleVars)) {
+    sam <- sample_data(physeq) %>%
+      as("data.frame") %>% 
+      data.table::as.data.table(keep.rownames = "Sample")
+    dtb <- dtb[sam, on = .(Sample = Sample)]
+  }
+  # Add the tax table if it exists
+  if (!is.null(rankNames)) {
+    tax <- tax_table(physeq) %>%
+      as("matrix") %>%
+      data.table::as.data.table(keep.rownames = "OTU")
+    dtb <- dtb[tax, on = .(OTU = OTU)]
+  }
+  # Arrange by Abundance, then OTU names (to approx. phyloseq behavior)
+  dtb <- dtb %>%
+    data.table::setorder(-Abundance, OTU)
+  # Return as requested class
+  if (as %in% c("data.table", "dt")) {
+    dtb
+  } else if (as %in% c("data.frame", "df")) {
+    dtb %>% as("data.frame")
+  } else if (as %in% c("tbl_df", "tbl", "tibble")) {
+    dtb <- dtb %>% tibble::as_tibble()
+    attr(dtb, ".internal.selfref") <- NULL
+    dtb
+  } else {
+    stop("Invalid output class specified by `as`.")
+  }
+}
+
 ################################################################################
 #' A flexible, informative barplot phyloseq data
 #'
