@@ -73,7 +73,7 @@ setGeneric("merge_taxa_vec",
 
 #' @rdname merge_taxa_vec-methods
 setMethod("merge_taxa_vec", "phyloseq",
-  function(x, group, reorder = TRUE, tax_adjust = 1L) {
+  function(x, group, reorder = FALSE, tax_adjust = 1L) {
     stopifnot(ntaxa(x) == length(group))
     stopifnot(tax_adjust %in% c(0L, 1L, 2L))
     # Warn the user if an impossible reordering is requested
