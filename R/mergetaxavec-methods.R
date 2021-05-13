@@ -135,7 +135,9 @@ setMethod("merge_taxa_vec", "otu_table",
       data.table::setorder(new_names, group)
     # Compute new table with base::rowsum(). The call to rowsum() makes the
     # rownames the group names.
+    #system.time(Matrix.utils::aggregate.Matrix(rnorm(2000),groups))
     # setmethod for rowsum, with reordering 
+    # otu<- otu_table(Matrix.utils::aggregate.Matrix(m1,groups),taxa_are_rows=TRU)
     otu <- rowsum(x, group=group, reorder = reorder)
     idx<- match(taxa_names(otu), new_names$group)
     stopifnot(length(taxa_names(otu))== length(idx) )    
