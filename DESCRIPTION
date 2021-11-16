@@ -1,4 +1,4 @@
-Package: phyloseq
+Package: phyloseqSparse
 Version: 1.27.6
 Date: 2019-04-23
 Title: Handling and analysis of high-throughput microbiome
