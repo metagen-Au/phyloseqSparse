@@ -62,7 +62,7 @@ setMethod("tax_table", "matrix", function(object){
 # Constructor; coerce to matrix, then pass on for creating taxonomyTable.
 #' @rdname tax_table-methods
 #' @aliases tax_table,data.frame-method
-setMethod("tax_table", "data.frame", function(object){
+setMethod("tax_table", "matrix", function(object){
 	# Warn first
   text = "Coercing from data.frame class to character matrix \n"
   text = paste0(text, "prior to building taxonomyTable. \n")
