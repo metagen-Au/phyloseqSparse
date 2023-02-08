@@ -1,7 +1,7 @@
 ################################################################################
 # Use testthat to test phyloseq transformation functions/methods
 ################################################################################
-library("phyloseq"); library("magrittr"); library("testthat")
+library("phyloseqSparse"); library("magrittr"); library("testthat")
 # # # # TESTS!
 ################################################################################
 # rarefy_even_depth
