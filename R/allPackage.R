@@ -15,7 +15,7 @@
 #' and native implementation of methods that are not available in other R packages.
 #'
 #' @import methods
-#' @name phyloseq-package
+#' @name phyloseqSparse-package
 #' @author Paul J. McMurdie II \email{mcmurdie@@stanford.edu}
 #' @references \url{www.stanford.edu/~mcmurdie}
 #' @docType package

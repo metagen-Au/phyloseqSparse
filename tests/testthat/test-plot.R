@@ -1,7 +1,7 @@
 ################################################################################
 # plot_ordination unit tests
 ################################################################################
-library("phyloseq"); library("testthat"); library("ggplot2")
+library("phyloseqSparse"); library("testthat"); library("ggplot2")
 data("GlobalPatterns")
 # Subset to small dataset for quicker testing
 GP <- prune_taxa(tail(names(sort(taxa_sums(GlobalPatterns))), 50), GlobalPatterns)

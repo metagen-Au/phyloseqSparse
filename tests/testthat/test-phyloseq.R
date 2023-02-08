@@ -1,7 +1,7 @@
 ################################################################################
 # Use testthat to test phyloseq constructor and other class internals.
 ################################################################################
-library("phyloseq"); library("testthat")
+library("phyloseqSparse"); library("testthat")
 # # # # TESTS!
 set.seed(8888)
 

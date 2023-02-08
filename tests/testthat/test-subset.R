@@ -1,5 +1,5 @@
 # load libraries
-library("phyloseq"); library("testthat")
+library("phyloseqSparse"); library("testthat")
 # # # # TESTS!
 set.seed(888)
 

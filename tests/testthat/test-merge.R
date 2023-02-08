@@ -1,5 +1,5 @@
 # testthat tests don't do anything when successful.
-library("phyloseq"); packageVersion("phyloseq")
+library("phyloseqSparse"); packageVersion("phyloseqSparse")
 library("testthat"); packageVersion("testthat")
 
 
@@ -275,10 +275,10 @@ test_that("merge_taxa() replaces disagreements in taxonomy with NA", {
 })
 test_that("merge_taxa() properly handles different types and orders of taxa specified by the eqtaxa and archetype arguments, and also handles refseq data", {
   # Test merge_taxa on data with a reference sequence file.
-  otufile <- system.file("extdata", "GP_otu_table_rand_short.txt.gz", package="phyloseq")
-  mapfile <- system.file("extdata", "master_map.txt", package="phyloseq")
-  trefile <- system.file("extdata", "GP_tree_rand_short.newick.gz", package="phyloseq")
-  rs_file <- system.file("extdata", "qiime500-refseq.fasta", package="phyloseq")
+  otufile <- system.file("extdata", "GP_otu_table_rand_short.txt.gz", package="phyloseqSparse")
+  mapfile <- system.file("extdata", "master_map.txt", package="phyloseqSparse")
+  trefile <- system.file("extdata", "GP_tree_rand_short.newick.gz", package="phyloseqSparse")
+  rs_file <- system.file("extdata", "qiime500-refseq.fasta", package="phyloseqSparse")
   rs0 <- import_qiime(otufile, mapfile, trefile, rs_file)
   rs1 = merge_taxa(rs0, c("71074", "10517", "8096"))
   rs2 = merge_taxa(rs0, c("71074", "8096", "10517"), "71074")

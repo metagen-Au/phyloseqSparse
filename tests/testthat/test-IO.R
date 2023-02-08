@@ -1,22 +1,22 @@
 ################################################################################
 # Use testthat to test file import and resulting class (and values)
 ################################################################################
-library("phyloseq"); library("testthat")
+library("phyloseqSparse"); library("testthat")
 # # # # TESTS!
 
 ################################################################################
 # import_mothur tests
-mothlist  <- system.file("extdata", "esophagus.fn.list.gz", package="phyloseq")
-mothgroup <- system.file("extdata", "esophagus.good.groups.gz", package="phyloseq")
-mothtree  <- system.file("extdata", "esophagus.tree.gz", package="phyloseq")
+mothlist  <- system.file("extdata", "esophagus.fn.list.gz", package="phyloseqSparse")
+mothgroup <- system.file("extdata", "esophagus.good.groups.gz", package="phyloseqSparse")
+mothtree  <- system.file("extdata", "esophagus.tree.gz", package="phyloseqSparse")
 cutoff    <- "0.10"
 esophman  <- import_mothur(mothlist, mothgroup, mothtree, cutoff)	
 # mothur "Shared" file, create with mothur from these example data files
-mothshared = system.file("extdata", "esophagus.fn.shared.gz", package="phyloseq")
-constaxonomy = system.file("extdata", "mothur_example.cons.taxonomy.gz", package="phyloseq")
+mothshared = system.file("extdata", "esophagus.fn.shared.gz", package="phyloseqSparse")
+constaxonomy = system.file("extdata", "mothur_example.cons.taxonomy.gz", package="phyloseqSparse")
 
 test_that("import_mothur: import of esophagus dataset from mothur files in extdata/ produces a phyloseq object", {
-	expect_that(esophman, is_a("phyloseq"))
+	expect_that(esophman, is_a("phyloseqSparse"))
 })
 
 test_that("import_mothur: The two phyloseq objects, example and just-imported, are identical", {
@@ -69,7 +69,7 @@ test_that("the import_RDP_otu function can properly read gzipped-example", {
   # Setup data
 	otufile <- system.file("extdata",
 	                       "rformat_dist_0.03.txt.gz",
-	                       package="phyloseq")
+	                       package="phyloseqSparse")
 	ex_otu  <- import_RDP_otu(otufile)	
 	# test expectations
 	expect_output(print(head(t(ex_otu))), "OTU Table:")
@@ -83,14 +83,14 @@ test_that("the import_RDP_otu function can properly read gzipped-example", {
 ################################################################################
 # import_qiime tests
 ################################################################################
-otufile <- system.file("extdata", "GP_otu_table_rand_short.txt.gz", package="phyloseq")
-mapfile <- system.file("extdata", "master_map.txt", package="phyloseq")
-trefile <- system.file("extdata", "GP_tree_rand_short.newick.gz", package="phyloseq")
-rs_file <- system.file("extdata", "qiime500-refseq.fasta", package="phyloseq")
+otufile <- system.file("extdata", "GP_otu_table_rand_short.txt.gz", package="phyloseqSparse")
+mapfile <- system.file("extdata", "master_map.txt", package="phyloseqSparse")
+trefile <- system.file("extdata", "GP_tree_rand_short.newick.gz", package="phyloseqSparse")
+rs_file <- system.file("extdata", "qiime500-refseq.fasta", package="phyloseqSparse")
 
 t0 <- import_qiime(otufile, mapfile, trefile, rs_file, verbose=FALSE)
 test_that("Class of import result is phyloseq-class", {
-	expect_is(t0, "phyloseq")
+	expect_is(t0, "phyloseqSparse")
 })
 
 test_that("Classes of components are as expected", {
@@ -180,13 +180,13 @@ test_that("Taxonomy vector parsing functions behave as expected", {
 ################################################################################
 # import_biom tests
 
-rich_dense_biom  <- system.file("extdata", "rich_dense_otu_table.biom",  package="phyloseq")
-rich_sparse_biom <- system.file("extdata", "rich_sparse_otu_table.biom", package="phyloseq")
-min_dense_biom   <- system.file("extdata", "min_dense_otu_table.biom",   package="phyloseq")
-min_sparse_biom  <- system.file("extdata", "min_sparse_otu_table.biom",  package="phyloseq")
+rich_dense_biom  <- system.file("extdata", "rich_dense_otu_table.biom",  package="phyloseqSparse")
+rich_sparse_biom <- system.file("extdata", "rich_sparse_otu_table.biom", package="phyloseqSparse")
+min_dense_biom   <- system.file("extdata", "min_dense_otu_table.biom",   package="phyloseqSparse")
+min_sparse_biom  <- system.file("extdata", "min_sparse_otu_table.biom",  package="phyloseqSparse")
 # the tree and refseq file paths that are suitable for all biom format style examples
-treefilename = system.file("extdata", "biom-tree.phy",  package="phyloseq")
-refseqfilename = system.file("extdata", "biom-refseq.fasta",  package="phyloseq")
+treefilename = system.file("extdata", "biom-tree.phy",  package="phyloseqSparse")
+refseqfilename = system.file("extdata", "biom-refseq.fasta",  package="phyloseqSparse")
 
 test_that("Importing biom files yield phyloseq objects", {
 	library("biomformat")
@@ -196,8 +196,8 @@ test_that("Importing biom files yield phyloseq objects", {
 	rich_dense = import_biom(rdbiom)
 	rich_sparse = import_biom(rsbiom)
 
-	expect_is(rich_dense,  ("phyloseq"))
-	expect_is(rich_sparse, ("phyloseq"))
+	expect_is(rich_dense,  ("phyloseqSparse"))
+	expect_is(rich_sparse, ("phyloseqSparse"))
 	
 	expect_equal(ntaxa(rich_dense), (5L))
 	expect_equal(ntaxa(rich_sparse), (5L))
@@ -222,10 +222,10 @@ test_that("The different types of biom files yield phyloseq objects", {
 	min_dense = import_biom(min_dense_biom, treefilename, refseqfilename, parseFunction=parse_taxonomy_greengenes)
 	min_sparse = import_biom(min_sparse_biom, treefilename, refseqfilename, parseFunction=parse_taxonomy_greengenes)
 	
-	expect_is(rich_dense,  ("phyloseq"))
-	expect_is(rich_sparse, ("phyloseq"))
-	expect_is(min_dense,   ("phyloseq"))
-	expect_is(min_sparse,  ("phyloseq"))
+	expect_is(rich_dense,  ("phyloseqSparse"))
+	expect_is(rich_sparse, ("phyloseqSparse"))
+	expect_is(min_dense,   ("phyloseqSparse"))
+	expect_is(min_sparse,  ("phyloseqSparse"))
 
 	expect_equal(ntaxa(rich_dense), (5L))
 	expect_equal(ntaxa(rich_sparse), (5L))
@@ -297,7 +297,7 @@ test_that("the import_biom and import(\"biom\", ) syntax give same result", {
 ################################################################################
 # read_tree tests
 test_that("The read_tree function works as expected:", {
-	GPNewick <- read_tree(system.file("extdata", "GP_tree_rand_short.newick.gz", package="phyloseq"))
+	GPNewick <- read_tree(system.file("extdata", "GP_tree_rand_short.newick.gz", package="phyloseqSparse"))
 	expect_that(GPNewick, is_a("phylo"))
 	expect_equal(ntaxa(GPNewick), length(GPNewick$tip.label))
 	expect_equal(ntaxa(GPNewick), 500L)
@@ -306,7 +306,7 @@ test_that("The read_tree function works as expected:", {
 	# Now read a nexus tree... 
 	# Some error-handling expectations
 	expect_that(read_tree("alskflsakjsfskfhas.akshfaksj"), gives_warning()) # file not exist
-	not_tree <- system.file("extdata", "esophagus.good.groups.gz", package="phyloseq")
+	not_tree <- system.file("extdata", "esophagus.good.groups.gz", package="phyloseqSparse")
 	expect_that(read_tree(not_tree), is_a("NULL")) # file not a tree, gives NULL
 	expect_that(read_tree(not_tree, TRUE), throws_error()) # file not a tree, check turned on/TRUE
 })
@@ -314,7 +314,7 @@ test_that("The read_tree function works as expected:", {
 test_that("The specialized read_tree_greengenes function works:", {
   # The included, gzipped version of the the 13_5 73% similarity greengenes tree.
   # It causes ape::read.tree to fail with an error, but read_tree_greengenes should be fine.
-  treefile = system.file("extdata", "gg13-5-73.tree.gz", package="phyloseq")
+  treefile = system.file("extdata", "gg13-5-73.tree.gz", package="phyloseqSparse")
   x = read_tree_greengenes(treefile)
   expect_is(x, "phylo")
   # Happen to know that all OTU names should be numbers.
@@ -332,9 +332,9 @@ test_that("The specialized read_tree_greengenes function works:", {
 # microbio.me/qiime data repository.
 #
 zipfile = "study_816_split_library_seqs_and_mapping.zip"
-zipfile = system.file("extdata", zipfile, package="phyloseq")
+zipfile = system.file("extdata", zipfile, package="phyloseqSparse")
 tarfile = "study_816_split_library_seqs_and_mapping.tar.gz"
-tarfile = system.file("extdata", tarfile, package="phyloseq")
+tarfile = system.file("extdata", tarfile, package="phyloseqSparse")
 tarps = suppressWarnings(microbio_me_qiime(tarfile))
 zipps = suppressWarnings(microbio_me_qiime(zipfile))
 # This function is intended to interface with an external server,
@@ -347,14 +347,14 @@ zipps = suppressWarnings(microbio_me_qiime(zipfile))
 # and the function attempts to provide informative status
 # and error messages if things go awry.
 test_that("The microbio_me_qiime imports as expected: .tar.gz", {
-  expect_is(tarps, "phyloseq")
+  expect_is(tarps, "phyloseqSparse")
   expect_is(sample_data(tarps, errorIfNULL=FALSE), "sample_data")
   expect_is(otu_table(tarps, errorIfNULL=FALSE), "otu_table")
   expect_identical(nrow(otu_table(tarps)), 50L)
   expect_identical(nrow(sample_data(tarps)), 15L)
 })
 test_that("The microbio_me_qiime imports as expected: .zip", {  
-  expect_is(zipps, "phyloseq")
+  expect_is(zipps, "phyloseqSparse")
   expect_is(sample_data(zipps, errorIfNULL=FALSE), "sample_data")
   expect_is(otu_table(zipps, errorIfNULL=FALSE), "otu_table")
   expect_identical(nrow(otu_table(zipps)), 50L)
@@ -368,7 +368,7 @@ test_that("Results of .tar.gz and .zip should be identical", {
 ################################################################################
 # import_usearch_uc
 ################################################################################
-usearchfile = system.file("extdata", "usearch.uc", package="phyloseq")
+usearchfile = system.file("extdata", "usearch.uc", package="phyloseqSparse")
 OTU1 = import_usearch_uc(usearchfile)
 test_that("import_usearch_uc: Properly omit entries from failed search", {  
   ucLines = readLines(usearchfile)
