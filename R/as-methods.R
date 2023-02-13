@@ -25,10 +25,10 @@ setAs("phyloseq", "sample_data", function(from){
 })
 ################################################################################
 setAs("taxonomyTable", "matrix", function(from){
-	from@.Data
+  from@.Data
 })
 setAs("phyloseq", "taxonomyTable", function(from){
-	tax_table(from)	
+  tax_table(from)	
 })
 ################################################################################
 setAs("phyloseq", "phylo", function(from){
