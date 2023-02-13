@@ -1,6 +1,6 @@
 <link href="http://joey711.github.com/phyloseq/markdown.css" rel="stylesheet"></link>
 
-# [phyloseq](http://joey711.github.com/phyloseq/)
+# [phyloseqSoarse](http://joey711.github.com/phyloseq/)
 
 [![Travis-CI Build Status](https://travis-ci.org/joey711/phyloseq.svg?branch=master)](https://travis-ci.org/joey711/phyloseq)
 
@@ -14,7 +14,7 @@ In R terminal:
 if(!requireNamespace("BiocManager")){
   install.packages("BiocManager")
 }
-BiocManager::install("phyloseq")
+BiocManager::install("phyloseqSparse")
 ```
 
 See [the phyloseq installation page](http://joey711.github.io/phyloseq/install.html)
