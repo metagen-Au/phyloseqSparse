@@ -14,6 +14,7 @@ License: AGPL-3
 Imports:
     ade4 (>= 1.7.4),
     ape (>= 5.0),
+    ape (<= 5.5),
     Biobase (>= 2.36.2),
     BiocGenerics (>= 0.22.0),
     biomformat (>= 1.0.0),
