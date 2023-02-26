@@ -4,7 +4,7 @@
 \alias{psmelt}
 \title{Melt phyloseq data object into large data.frame}
 \usage{
-psmelt(physeq)
+psmelt(physeq, as = "tbl_df")
 }
 \arguments{
 \item{physeq}{An [otu_table-class] or [phyloseq-class]; most useful for

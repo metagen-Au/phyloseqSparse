@@ -42,9 +42,9 @@ it returns the already-trimmed version of the phyloseq object.
 }
 \section{Functions}{
 \itemize{
-\item \code{filterTaxa2}: Sets `prune = TRUE`
-}}
+\item \code{filterTaxa2()}: Sets `prune = TRUE`
 
+}}
 \examples{
  data("enterotype")
  require("genefilter")

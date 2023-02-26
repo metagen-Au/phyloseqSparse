@@ -8,7 +8,9 @@ gapstat_ord(
   ord,
   axes = c(1:2),
   type = "sites",
-  FUNcluster = function(x, k) {     list(cluster = pam(x, k, cluster.only = TRUE)) },
+  FUNcluster = function(x, k) {
+     list(cluster = pam(x, k, cluster.only = TRUE))
+ },
   K.max = 8,
   ...
 )
