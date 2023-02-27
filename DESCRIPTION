@@ -19,6 +19,7 @@ Imports:
     Biostrings (>= 2.40.0),
     cluster (>= 2.0.4),
     data.table (>= 1.10.4),
+    dplyr (>= 1.10.4),
     foreach (>= 1.4.3),
     ggplot2 (>= 2.1.0),
     igraph (>= 1.0.1),
